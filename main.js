@@ -1,4 +1,4 @@
-https://teachablemachine.withgoogle.com/models/PsCNhvfUv/
+//https://teachablemachine.withgoogle.com/models/PsCNhvfUv/
 Webcam.set({
 width:350,
 Height:300,
@@ -26,9 +26,37 @@ function modelLoaded() {
 }
 
 function speak(){
-    var synth = window.SpeechSynthesis;
-    speak_data_1 = "The first prediction is " + prediction_1;
-    speak_data_2 ="And the second prediction is " + prediction_2;
-    var utterThis = new SpeechSynthesisUtterance(speak_data_1 + speak_data_2);
+    var synth = window.speechSynthesis;
+    speak_data_1 = "The prediction is " + prediction_1;
+    var utterThis = new SpeechSynthesisUtterance(speak_data_1);
     synth.speak(utterThis);
+}
+function check()
+{
+    img = document.getElementById('captured_image');
+    classifier.classify(img, gotResult);
+}
+function gotResult(error, results) {
+    if(error) {
+    console.error(error);    
+    }else{
+    console.log(results);
+        document.getElementById("result_emotion_name").innerHTML = results[0].label;
+        prediction_1 = results[0].label;
+        speak();
+        if(results[0].label == "Thumbs up")
+        {
+            document.getElementById("update_emoji").innerHTML ="&#128076;";
+        }
+        if(results[0].label == "Amzing")
+        {
+            document.getElementById("update_emoji").innerHTML ="&#128077;";
+        }
+        if(results[0].label == "Victory")
+        {
+            document.getElementById("update_emoji").innerHTML ="&#9996";
+        }
+    }    
+    
+    
 }
